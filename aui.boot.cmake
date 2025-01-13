@@ -21,6 +21,13 @@
 
 cmake_minimum_required(VERSION 3.16)
 
+option(AUIB_NO_PRECOMPILED "Forbid usage of precompiled binaries")
+option(AUIB_FORCE_PRECOMPILED "Forbid local build and use precompiled binaries only")
+
+if (AUIB_NO_PRECOMPILED AND AUIB_FORCE_PRECOMPILED)
+    message(FATAL_ERROR "AUIB_NO_PRECOMPILED and AUIB_FORCE_PRECOMPILED are exclusive.")
+endif()
+
 function(_auib_fix_multiconfiguration)
     get_property(_tmp GLOBAL PROPERTY GENERATOR_IS_MULTI_CONFIG)
     if (NOT _tmp)
@@ -700,6 +707,9 @@ function(auib_import AUI_MODULE_NAME URL)
             endif()
 
             if (NOT _skip_compilation)
+                if (AUIB_FORCE_PRECOMPILED)
+                    message(FATAL_ERROR "Can't find a precompiled binary for ${AUI_MODULE_NAME}. (-DAUIB_FORCE_PRECOMPILED)")
+                endif()
                 include(FetchContent)
 
                 if (AUIB_IMPORT_ARCHIVE)
