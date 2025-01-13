@@ -211,7 +211,7 @@ jobs:
   release:
     runs-on: ubuntu-latest
     permissions: write-all
-    if: github.action != 'pull_request'
+    if: github.event_name != 'pull_request'
     name: "Create release page"
     steps:
       - name: Retrieve version
