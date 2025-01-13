@@ -2,6 +2,8 @@ cmake_minimum_required(VERSION 3.16)
 
 option(AUI_CATCH_UNHANDLED "Catch segfault" ON)
 option(AUI_COROUTINES "Use C++20 coroutines" OFF)
+option(AUI_ENABLE_ASAN "Enable AddressSanitizer" OFF)
+option(AUI_ENABLE_DEATH_TESTS "Enable GTest death tests" ON)
 
 aui_module(aui.core EXPORT aui)
 aui_enable_tests(aui.core)
@@ -132,6 +134,11 @@ foreach(_var AUI_PLATFORM_WIN
     target_compile_definitions(aui.core PUBLIC ${_var}=${${_var}})
 endforeach()
 
+if (AUI_ENABLE_DEATH_TESTS)
+    target_compile_definitions(aui.core PUBLIC AUI_ENABLE_DEATH_TESTS=1)
+else()
+    target_compile_definitions(aui.core PUBLIC AUI_ENABLE_DEATH_TESTS=0)
+endif()
 
 if (AUI_SHARED_PTR_FIND_INSTANCES)
     target_compile_definitions(aui.core PUBLIC AUI_SHARED_PTR_FIND_INSTANCES=1)
@@ -154,3 +161,12 @@ if (NOT MSVC AND AUI_CATCH_UNHANDLED)
         target_compile_options(aui.core PUBLIC -fexceptions -fnon-call-exceptions)
     endif()
 endif()
+
+if (AUI_ENABLE_ASAN)
+    message(STATUS "AUI_ENABLE_ASAN=${AUI_ENABLE_ASAN}")
+    target_compile_options(aui.core PUBLIC -fsanitize=address)
+    target_link_options(aui.core PUBLIC -fsanitize=address)
+endif()
+
+# uncomment this to debug concepts
+# target_compile_options(aui.core PUBLIC -fconcepts-diagnostics-depth=5)

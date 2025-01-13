@@ -17,7 +17,7 @@
 
 namespace ass {
     template<typename Base>
-    struct disabled: Base {
+    struct disabled: Base { // ignore ass_selectors it's used in compound by class_of or t
         template<typename... Args>
         disabled(Args&&... args):
             Base(std::forward<Args>(args)...)
@@ -26,13 +26,13 @@ namespace ass {
         }
 
         bool isStateApplicable(AView* view) override {
-            return Base::isStateApplicable(view) && !view->isEnabled();
+            return Base::isStateApplicable(view) && !*view->enabled();
         }
 
         void setupConnections(AView* view, const _<AAssHelper>& helper) override {
             Base::setupConnections(view, helper);
-            view->enabledState.clearAllConnectionsWith(helper.get());
-            AObject::connect(view->enabledState, slot(helper)::onInvalidateStateAss);
+            view->enabled().changed.clearAllOutgoingConnectionsWith(helper.get());
+            AObject::connect(view->enabled().changed, slot(helper)::onInvalidateStateAss);
         }
     };
 }

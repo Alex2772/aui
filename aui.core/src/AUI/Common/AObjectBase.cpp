@@ -9,4 +9,15 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#include "ASet.h"
+#include "AObject.h"
+#include "AAbstractSignal.h"
+
+ASpinlockMutex AObjectBase::SIGNAL_SLOT_GLOBAL_SYNC;
+
+void AObjectBase::clearAllIngoingConnections() noexcept {
+    auto incomingConnections = [&] {
+      std::unique_lock lock(SIGNAL_SLOT_GLOBAL_SYNC);
+      return std::exchange(mIngoingConnections, {});
+    }();
+    incomingConnections.clear();
+}

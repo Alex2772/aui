@@ -18,7 +18,7 @@
 
 namespace ass {
     template<typename Base>
-    struct focused: Base {
+    struct focused: Base {// ignore ass_selectors it's used in compound by class_of or t
         template<typename... Args>
         focused(Args&&... args):
                 Base(std::forward<Args>(args)...)
@@ -32,7 +32,7 @@ namespace ass {
 
         void setupConnections(AView* view, const _<AAssHelper>& helper) override {
             Base::setupConnections(view, helper);
-            view->focusState.clearAllConnectionsWith(helper.get());
+            view->focusState.clearAllOutgoingConnectionsWith(helper.get());
             AObject::connect(view->focusState, slot(helper)::onInvalidateStateAss);
         }
     };

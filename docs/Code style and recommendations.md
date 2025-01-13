@@ -19,15 +19,15 @@ AUI's code should be kept with the following code style:
 - Use `#pragma once` instead of C-style include guards
 - Use Doxygen (`@`-style, not `\`)
 - Avoid global functions (at least put them to namespaces)
-- Every symbol (class, struct, namespace, file) prefixed with '`A`', '`aui`', '`AUI_`' is a part of AUI's stable public API ready for the external usage. Symbols without such prefixes are called _internal_ and can be also used (if possible) when needed. Be careful using internal symbols since
-  there's no guarantee about their API stability.
+- Every symbol (class, struct, namespace, file) prefixed with '`A`', '`aui`', '`AUI_`' is a part of AUI's stable public
+  API ready for the external usage. Symbols without such prefixes are called _internal_ and can be also used (if
+  possible) when needed. Be careful using internal symbols since there's no guarantee about their API stability.
+- Follow visibility in this order when possible: `public`, `protected`, `private`. Header's user is more interested in
+  public APIs rather than in private.
 
 Basic example:
 ```cpp
 class User {
-private:
-  AString mUsername;
-
 public:
   // User(const AString& username): mUsername(username) {} <--- outdated
   // use this instead:
@@ -41,6 +41,10 @@ public:
   void setUsername(AString username) noexcept { // a typical setter; also uses noexcept
     mUsername = std::move(username);
   }
+
+private:
+  AString mUsername;
+
 };
 ```
 
@@ -52,18 +56,16 @@ about it. Also in AUI almost every assertion contains a quick tip how to solve t
 do the same. For example:
 
 ```cpp
-assert(("AAbstractThread::processMessages() should not be called from other thread",
-        mId == std::this_thread::get_id()));
+AUI_ASSERTX(mId == std::this_thread::get_id(),
+            "AAbstractThread::processMessages() should not be called from other thread");
 ```
 
-The code above ensures that the function was not called from some other thread. As you can see, the tooltip is produced
-using extra brace pair and `operator,`:
+The code above ensures that the function was not called from some other thread.
 
-```cpp
-assert(("your message", expression))
-```
-
-Do not put algorithm-necessary code inside `assert()` since asserts are removed in release builds on some compilers, i.e. don't `assert(("someAction failed!", someObject->someAction() != 0))` since it leads to hard-to-find bugs.
+@note
+Do not put algorithm-necessary code inside `assert()`, `AUI_ASSERT` or `AUI_ASSERTX` since asserts are removed in
+release builds on some compilers, i.e. don't `assert(("someAction failed!", someObject->someAction() != 0))` since it
+leads to hard-to-find bugs.
 
 ## Assert or exception?
 
@@ -80,7 +82,7 @@ void loginButtonClicked() {
 
 # STL-like functionality
 
-It's hard to say which functionality can be called 'STL-like'. Commonly, any iterator-based algorithm (i.e. `aui::binary_search`), global functions, trait structs are STL-like functionality. The final goal is to avoid mixed-style expressions like `AString::const_iterator` which hurts the eyes.
+It's hard to say which functionality can be called 'STL-like'. Commonly, any iterator-based algorithm (i.e. `aui::binary_search`), global functions, trait structs are STL-like functionality. The final goal is to avoid mixed-style expressions like `AString::const_iterator` which hurts eyes.
 
 # Template metaprogramming and macros
 

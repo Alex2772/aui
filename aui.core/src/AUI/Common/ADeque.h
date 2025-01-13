@@ -117,12 +117,12 @@ public:
 
     /**
      * Shortcut to <code>insertAll</code>.
-     * @param rhs container to push
+     * @param c container to push
      * @return self
      */
-    template<typename OtherContainer, std::enable_if_t<!std::is_convertible_v<OtherContainer, StoredType>, bool> = true>
+    template<typename OtherContainer>
     inline self& operator<<(const OtherContainer& c) noexcept
-    {
+    requires (!std::is_convertible_v<OtherContainer, StoredType>) {
         insertAll(c);
         return *this;
     }
@@ -182,10 +182,10 @@ public:
 
     /**
      * @param value element to find.
-     * @return index of the specified element. If element is not found, -1 is returned.
+     * @return index of the specified element. If element is not found, std::nullopt is returned.
      */
     [[nodiscard]]
-    size_t indexOf(const StoredType& value) const noexcept
+    AOptional<size_t> indexOf(const StoredType& value) const noexcept
     {
         return aui::container::index_of(*this, value);
     }

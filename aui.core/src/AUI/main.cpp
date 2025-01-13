@@ -16,6 +16,7 @@
  * @details AUI's core central library without graphical components used by other modules.
  * Adds these features to C++:
  * - @ref signal_slot "signal-slot system"
+ * - @ref property_system "property system"
  * - @ref AAbstractThread::interrupt() "interruptable threads"
  * - @ref io "input-output"
  * - @ref AI18n "i18n"
@@ -32,7 +33,10 @@
 /**
  * @defgroup useful_macros Useful macros
  * @ingroup core
- * @brief A set of functionality that introduces non-standard syntax which seems like the C++ features.
+ * @brief A set of functionality that introduces non-standard syntax which seems like the language features.
+ * @details
+ * @note
+ * For build-time macros, see @ref "docs/Macros.md".
  */
 
 /**

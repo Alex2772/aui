@@ -63,8 +63,8 @@ public:
 };
 
 namespace declarative {
-    struct Button : aui::ui_building::layouted_container_factory<AHorizontalLayout, AButtonEx> {
-        using aui::ui_building::layouted_container_factory<AHorizontalLayout, AButtonEx>::layouted_container_factory;
+    struct Button : aui::ui_building::view_container_layout<AHorizontalLayout, AButtonEx> {
+        using aui::ui_building::view_container_layout<AHorizontalLayout, AButtonEx>::layouted_container_factory;
 
         Button(AString text) : layouted_container_factory<AHorizontalLayout, AButtonEx>({Label{std::move(text)}}) {}
 
@@ -101,7 +101,7 @@ namespace ass::button {
             mWrapped->setupConnections(view, helper);
 
             if (auto c = dynamic_cast<AButton*>(view)) {
-                c->defaultState.clearAllConnectionsWith(helper.get());
+                c->defaultState.clearAllOutgoingConnectionsWith(helper.get());
                 AObject::connect(c->defaultState, slot(helper)::onInvalidateStateAss);
             }
         }

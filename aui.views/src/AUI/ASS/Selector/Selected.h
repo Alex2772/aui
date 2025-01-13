@@ -15,12 +15,28 @@
 #include "AAssSelector.h"
 
 namespace ass {
+    /**
+     * @brief Interface to work with ass::Selected selector.
+     */
     class ISelectable {
     friend struct Selected;
     protected:
         virtual bool selectableIsSelectedImpl() = 0;
     };
 
+    /**
+     * @brief Wraps another selector matching Selected views.
+     * @ingroup ass_selectors
+     * @details
+     * @code{cpp}
+     * {
+     *   Selected(t<ACheckBox>()),
+     *   BackgroundImage {":uni/svg/checkbox.svg" },
+     * },
+     * @endcode
+     *
+     * The view must implement ass::ISelectable.
+     */
     struct Selected: IAssSubSelector {
     private:
         _unique<IAssSubSelector> mWrapped;
@@ -48,7 +64,7 @@ namespace ass {
             IAssSubSelector::setupConnections(view, helper);
             mWrapped->setupConnections(view, helper);
 
-            view->customCssPropertyChanged.clearAllConnectionsWith(helper.get());
+            view->customCssPropertyChanged.clearAllOutgoingConnectionsWith(helper.get());
             AObject::connect(view->customCssPropertyChanged, slot(helper)::onInvalidateStateAss);
         }
     };

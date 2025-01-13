@@ -187,7 +187,7 @@ AString ATextArea::toString() const {
     return text();
 }
 
-const AString& ATextArea::text() const {
+const AString& ATextArea::getText() const {
     if (!mCompiledText) {
         AString compiledText;
         compiledText.reserve(length());
@@ -431,7 +431,7 @@ void ATextArea::setSize(glm::ivec2 size) {
                 continue;
             }
 
-            connect(scrollbar->updatedMaxScroll, this, [this] {
+            mUpdatedMaxScrollSignal = connect(scrollbar->updatedMaxScroll, this, [this] {
                 AObject::disconnect();
                 AUI_NULLSAFE(findScrollArea())->scrollTo(ARect<int>::fromTopLeftPositionAndSize(
                             getPositionInWindow() + mCursorPosition - mPadding.leftTop(), {1, getFontStyle().size}));

@@ -16,7 +16,10 @@ Whether catch unhandled exceptions in the root of event loops or not. Might be u
 debugging.
 
 ## AUI_COROUTINES
-Whether use C++ 20 coroutines support or not.
+Whether to use C++ 20 coroutines support.
+
+## AUI_ENABLE_ASAN
+Whether to use AddressSanitizer.
 
 ## AUI_PROFILING
 When `true`, AUI profiling features are enabled. This means "Performance" tab in devtools would appear and show
@@ -31,7 +34,7 @@ When `true`, shows touches visually (like in Android Developer Tools) and perfor
 Whether build examples or not.
 
 ## AUI_BUILD_FOR
-Specifies target platform for cross-compilation (see [cross-compiling](@ref md_docs_Crosscompiling)).
+Specifies target platform for cross-compilation (see [cross-compiling](docs/Crosscompiling.md)).
 
 ## AUIB_CACHE_DIR
 Changes aui.boot's cache dir (which is `~/.aui` by default).
@@ -58,7 +61,7 @@ Adds `printAllInstances()` to AUI's shared pointer type (`_`) which prints stack
 When evaluates to `true`, libraries are built as shared, as static otherwise.
 
 When AUI_BUILD_FOR is set, `BUILD_SHARED_LIBS` is overwritten to `false` 
-(see [cross-compiling](@ref md_docs_Crosscompiling))
+(see [cross-compiling](docs/Crosscompiling.md))
 
 ## AUI_IOS_CODE_SIGNING_REQUIRED
 Disables code signing step on iOS.
@@ -85,4 +88,7 @@ Disables "Waiting for repository" lock.
 
 Disables precompiled binaries.
 
+## AUIB_FORCE_PRECOMPILED
+
+Disables local compilation. If a precompiled binary was not found, a configure-time error is raised.
 
