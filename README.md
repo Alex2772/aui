@@ -42,7 +42,7 @@ project(aui_app)
 
 # Tip: in a production project don't use branch name, use a specific name tag (i.e. v1.1.1),
 # but for a sandbox project branch name is perfectly enough
-set(AUI_VERSION v6.2.11)
+set(AUI_VERSION v6.2.12)
 
 # Use AUI.Boot
 file(
